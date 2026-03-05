@@ -1,0 +1,159 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lab0104
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите количество строк n: ");
+            int n = int.Parse(Console.ReadLine());
+            Console.Write("Введите количество столбцов m: ");
+            int m = int.Parse(Console.ReadLine());
+
+            int[,] matrix = new int[n, m];
+            Random rnd = new Random();
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    matrix[i, j] = rnd.Next(-20, 21);
+                }
+            }
+
+            Console.WriteLine("\nИсходная матрица:");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Write($"{matrix[i, j],5}");
+                }
+                Console.WriteLine();
+            }
+
+            // a)
+            int sumWhite = 0;
+            int sumBlack = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if ((i + j) % 2 == 0)
+                    {
+                        sumWhite += matrix[i, j];
+                    }
+                    else
+                    {
+                        sumBlack += matrix[i, j];
+                    }
+                }
+            }
+
+            Console.WriteLine($"\na) Сумма на белых клетках: {sumWhite}");
+            Console.WriteLine($"   Сумма на чёрных клетках: {sumBlack}");
+            Console.WriteLine($"   Больше сумма на {(sumWhite > sumBlack ? "белых" : "чёрных")} клетках");
+
+            Console.WriteLine("\nb) Седловые точки:");
+            bool foundSaddle = false;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    //минимальный в строке
+                    bool minInRow = true;
+                    for (int k = 0; k < m; k++)
+                    {
+                        if (matrix[i, k] < matrix[i, j])
+                        {
+                            minInRow = false;
+                            break;
+                        }
+                    }
+
+                    //максимальный в столбце
+                    bool maxInCol = true;
+                    for (int k = 0; k < n; k++)
+                    {
+                        if (matrix[k, j] > matrix[i, j])
+                        {
+                            maxInCol = false;
+                            break;
+                        }
+                    }
+
+                    if (minInRow && maxInCol)
+                    {
+                        Console.WriteLine($"   Седловая точка: matrix[{i},{j}] = {matrix[i, j]}");
+                        foundSaddle = true;
+                    }
+                }
+            }
+
+            if (!foundSaddle)
+            {
+                Console.WriteLine("   Седловые точки не найдены");
+            }
+
+            // c)
+            Console.WriteLine("\nc) Матрица после замены:");
+
+            for (int i = 0; i < n; i++)
+            {
+                int max1 = int.MinValue;
+                int max2 = int.MinValue;
+
+                for (int j = 0; j < m; j++)
+                {
+                    if (matrix[i, j] > max1)
+                    {
+                        max2 = max1;
+                        max1 = matrix[i, j];
+                    }
+                    else if (matrix[i, j] > max2 && matrix[i, j] != max1)
+                    {
+                        max2 = matrix[i, j];
+                    }
+                    else if (max2 == int.MinValue && matrix[i, j] < max1)
+                    {
+                        max2 = matrix[i, j];
+                    }
+                }
+
+                if (max2 == int.MinValue)
+                {
+                    max2 = max1;
+                }
+
+                bool foundMax2 = false;
+                for (int j = 0; j < m; j++)
+                {
+                    if (!foundMax2 && matrix[i, j] == max2)
+                    {
+                        foundMax2 = true;
+                    }
+
+                    if (!foundMax2)
+                    {
+                        matrix[i, j] = max2;
+                    }
+                }
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Write($"{matrix[i, j],5}");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
