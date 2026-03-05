@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lab0103
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите размер массива n: ");
+            int n = int.Parse(Console.ReadLine());
+
+            int[] arr = new int[n];
+            Random rnd = new Random();
+
+            for (int i = 0; i < n; i++)
+            {
+                arr[i] = rnd.Next(-50, 51);
+            }
+
+            Console.WriteLine("\nИсходный массив:");
+            for (int i = 0; i < n; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(arr[i] + " ");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(arr[i] + " ");
+                }
+            }
+            Console.WriteLine();
+
+            for (int i = 0; i < n; i += 2)
+            {
+                int minIndex = i;
+                for (int j = i + 2; j < n; j += 2)
+                {
+                    if (arr[j] < arr[minIndex])
+                    {
+                        minIndex = j;
+                    }
+                }
+                if (minIndex != i)
+                {
+                    int temp = arr[i];
+                    arr[i] = arr[minIndex];
+                    arr[minIndex] = temp;
+                }
+            }
+
+            Console.WriteLine("\nМассив после сортировки чётных позиций:");
+            for (int i = 0; i < n; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(arr[i] + " ");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(arr[i] + " ");
+                }
+            }
+            Console.WriteLine();
+        }
+    }
+}
