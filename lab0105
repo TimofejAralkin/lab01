@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lab0105
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите количество студентов: ");
+            int studentCount = int.Parse(Console.ReadLine());
+
+            double[][] grades = new double[studentCount][];
+            double[] averages = new double[studentCount];
+
+            Random rnd = new Random();
+
+
+            for (int i = 0; i < studentCount; i++)
+            {
+                int subjectCount = rnd.Next(4, 8);
+                grades[i] = new double[subjectCount];
+
+                double sum = 0;
+                for (int j = 0; j < subjectCount; j++)
+                {
+                    grades[i][j] = rnd.Next(2, 6);
+                    sum += grades[i][j];
+                }
+                averages[i] = sum / subjectCount;
+            }
+
+            Console.WriteLine("\nИсходные оценки студентов:");
+            for (int i = 0; i < studentCount; i++)
+            {
+                Console.Write($"Студент {i + 1} (ср.балл {averages[i]:F2}): ");
+                for (int j = 0; j < grades[i].Length; j++)
+                {
+                    Console.Write(grades[i][j] + " ");
+                }
+                Console.WriteLine();
+            }
+
+            // b)
+            int maxIndex = 0;
+            for (int i = 1; i < studentCount; i++)
+            {
+                if (averages[i] > averages[maxIndex])
+                {
+                    maxIndex = i;
+                }
+            }
+            Console.WriteLine($"\nb) Студент с максимальным средним баллом: Студент {maxIndex + 1} ({averages[maxIndex]:F2})");
+
+            // c)
+            int countExcellent = 0;
+            for (int i = 0; i < studentCount; i++)
+            {
+                if (averages[i] >= 4.0)
+                {
+                    countExcellent++;
+                }
+            }
+            Console.WriteLine($"\nc) Количество студентов со средним баллом ≥ 4.0: {countExcellent}");
+
+            for (int i = 0; i < studentCount - 1; i++)
+            {
+                int maxAvgIndex = i;
+                for (int j = i + 1; j < studentCount; j++)
+                {
+                    if (averages[j] > averages[maxAvgIndex])
+                    {
+                        maxAvgIndex = j;
+                    }
+                }
+
+                double tempAvg = averages[i];
+                averages[i] = averages[maxAvgIndex];
+                averages[maxAvgIndex] = tempAvg;
+
+                double[] tempRow = grades[i];
+                grades[i] = grades[maxAvgIndex];
+                grades[maxAvgIndex] = tempRow;
+            }
+
+            Console.WriteLine("\nОтсортированные оценки студентов (по убыванию среднего балла):");
+            for (int i = 0; i < studentCount; i++)
+            {
+                Console.Write($"Студент {i + 1} (ср.балл {averages[i]:F2}): ");
+                for (int j = 0; j < grades[i].Length; j++)
+                {
+                    Console.Write(grades[i][j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
