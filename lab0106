@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lab0106
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const int MAX_BARRELS = 100; //максимальное количество бочек
+            double[] volumes = new double[MAX_BARRELS];
+            int barrelCount = 0;
+
+            Console.WriteLine("Ввод данных о бочках (для завершения введите отрицательную высоту):");
+
+            while (barrelCount < MAX_BARRELS)
+            {
+                Console.WriteLine($"\nБочка #{barrelCount + 1}:");
+
+                double height, radius;
+
+                do
+                {
+                    Console.Write("Введите высоту (положительное число): ");
+                    height = double.Parse(Console.ReadLine());
+                    if (height < 0) break;
+                    if (height <= 0) Console.WriteLine("Ошибка: высота должна быть положительной!");
+                } while (height <= 0);
+
+                if (height < 0) break;
+
+                do
+                {
+                    Console.Write("Введите радиус (положительное число): ");
+                    radius = double.Parse(Console.ReadLine());
+                    if (radius <= 0) Console.WriteLine("Ошибка: радиус должен быть положительным!");
+                } while (radius <= 0);
+
+                double volume = Math.PI * radius * radius * height;
+                volumes[barrelCount] = volume;
+
+                Console.WriteLine($"Объём бочки #{barrelCount + 1}: {volume:F3}");
+                barrelCount++;
+            }
+
+            if (barrelCount == 0)
+            {
+                Console.WriteLine("Не введено ни одной бочки. Программа завершена.");
+                return;
+            }
+
+            Console.WriteLine("\nВыберите операцию:");
+            Console.WriteLine("1 - количество бочек");
+            Console.WriteLine("2 - общий суммарный объём");
+            Console.WriteLine("3 - количество бочек с объёмом больше 10");
+            Console.WriteLine("4 - номер и объём самой большой бочки");
+            Console.Write("Ваш выбор: ");
+
+            int choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Console.WriteLine($"\nКоличество бочек: {barrelCount}");
+                    break;
+
+                case 2:
+                    double totalVolume = 0;
+                    for (int i = 0; i < barrelCount; i++)
+                    {
+                        totalVolume += volumes[i];
+                    }
+                    Console.WriteLine($"\nОбщий суммарный объём: {totalVolume:F3}");
+                    break;
+
+                case 3:
+                    int countOver10 = 0;
+                    for (int i = 0; i < barrelCount; i++)
+                    {
+                        if (volumes[i] > 10)
+                        {
+                            countOver10++;
+                        }
+                    }
+                    Console.WriteLine($"\nКоличество бочек с объёмом больше 10: {countOver10}");
+                    break;
+
+                case 4:
+                    int maxIndex = 0;
+                    for (int i = 1; i < barrelCount; i++)
+                    {
+                        if (volumes[i] > volumes[maxIndex])
+                        {
+                            maxIndex = i;
+                        }
+                    }
+                    Console.WriteLine($"\nСамая большая бочка: #{maxIndex + 1}, объём = {volumes[maxIndex]:F3}");
+                    break;
+
+                default:
+                    Console.WriteLine("Неверный код операции!");
+                    break;
+                }
+            }
+    }
+}
