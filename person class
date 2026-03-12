@@ -1,0 +1,62 @@
+class Person
+    {
+        
+
+        public string Fam { get; set; }
+       
+        
+        public string Name { get; set; }
+       
+        public DateTime Birth { get; set; }
+       
+        private char pol;
+        public char Pol
+        {
+            get { return pol; }
+            set 
+            {
+                if (value == 'f' || value == 'm')
+                {
+                    pol = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+            
+        }
+
+        public Person(string fam, string name, DateTime birth, char pol)
+        {
+            Fam = fam;
+            Name = name;
+            Birth = birth;
+            Pol = pol;
+        }
+
+        public Person() : this("fam", "name", default(DateTime), 'n')
+        { }
+
+        public void ReadPerson()
+        {
+            Console.WriteLine("name = ");
+            Name = Console.ReadLine();
+            Console.WriteLine("surname = ");
+            Fam = Console.ReadLine();
+            Console.WriteLine("Birth day = ");
+            Birth = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Gender = ");
+            Pol = Console.ReadLine()[0];
+        }
+
+        public void WritePerson()
+        {
+            Console.WriteLine(this);
+        }
+
+        public override string ToString()
+        {
+            return Fam + " " + Name + " " + Birth + " " + Pol; 
+        }
+    }
